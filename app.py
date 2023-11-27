@@ -21,7 +21,7 @@ def list_cupcakes():
 
 @app.route('/api/cupcakes/<int:id>')
 def get_cupcake(id):
-    """view infor  on a cupcake"""
+    """view info on a cupcake"""
     cupcake=Cupcake.query.get_or_404(id)
     return jsonify(cupcake=cupcake.serialize())
 
@@ -37,3 +37,23 @@ def make_cupcake():
     return (response_json, 201)
 
 
+@app.route('/api/cupcakes/<int:id>',methods=['PATCH'])
+def update_cupcake(id):
+    """update  info on a cupcake"""
+    cupcake=Cupcake.query.get_or_404(id)
+    cupcake.flavor = request.json.get('flavor',  cupcake.flavor)
+    cupcake.size = request.json.get('size',  cupcake.size)
+    cupcake.rating = request.json.get('rating',  cupcake.rating)
+    cupcake.image = request.json.get('image',  cupcake.image)
+    db.session.commit()
+    return jsonify(cupcake=cupcake.serialize())
+
+
+
+@app.route('/api/cupcakes/<int:id>',methods=['DELETE'])
+def delete_cupcake(id):
+    """delete a cupcake"""
+    cupcake=Cupcake.query.get_or_404(id)
+    db.session.delete(cupcake)
+    db.session.commit()
+    return jsonify(message="deleted")
