@@ -11,7 +11,10 @@ app.config['SQLALCHEMY_ECHO'] = True
 
 connect_db(app)
 
-#POST /api/cupcakes
+@app.route('/')
+def cupcake_form():
+    cupcakes=Cupcake.query.all()
+    return render_template('index.html',cupcakes=cupcakes)
 
 @app.route('/api/cupcakes')
 def list_cupcakes():
